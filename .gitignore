@@ -40,3 +40,6 @@ results/*
 code/logs/*
 code/checkpoints/*
 code/misclassified/*
+
+# ignore the data folder
+data/
