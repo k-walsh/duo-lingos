@@ -43,3 +43,4 @@ code/misclassified/*
 
 # ignore the data folder
 data/
+.DS_Store
