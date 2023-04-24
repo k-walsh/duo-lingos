@@ -74,6 +74,8 @@ def load_train_validation_data():
 
 # TODO: do we care about images being rbg vs black white ??
 
+# TODO: divide images by 255???
+
 
 def load_test_data():
     """load the testing data and return numpy arrays of data and encoded labels"""
@@ -102,9 +104,11 @@ def load_test_data():
 
 
 # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
-train_data, train_labels = load_train_validation_data()
-test_data, test_labels = load_test_data()
+# train_data, train_labels = load_train_validation_data()
+# test_data, test_labels = load_test_data()
 
 # print(f"train size: {len(train_data)}, val size: {len(val_data)}, test size: {len(val_labels)}")
 # print(val_labels)
-print(type(train_data), type(test_data))
+# print(type(train_data), type(test_data))
+
+# print("HIIII")
