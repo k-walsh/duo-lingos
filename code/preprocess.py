@@ -22,7 +22,7 @@ def load_train_data():
         # class_letter = categories.index(category)
         i = 0
         for img in os.listdir(category_path):
-            if i > 100: # to only load 100 train images for now
+            if i > 200: # to only load some train images for now
                 break
             file_path = os.path.join(category_path,img)
             img_array = img_as_float32(io.imread(file_path))
@@ -48,16 +48,27 @@ def load_train_validation_data():
 
     dataset_size = len(all_train_labels)
     train_size = int(dataset_size * 0.80)
-    val_size = int(dataset_size * 0.20)
+    val_size = dataset_size - train_size   
+    print(f"dataset size {dataset_size}, train_size {train_size}, val_size {val_size}")
     assert train_size + val_size == dataset_size
 
-    train_data = all_train_data.take(train_size)  
-    train_labels = all_train_labels.take(train_size)
+    # train_data = all_train_data.take(train_size)  
+    # train_labels = all_train_labels.take(train_size)
 
-    val_data = all_train_data.skip(train_size).take(val_size)
-    val_labels = all_train_labels.skip(train_size).take(val_size)
+    # val_data = all_train_data.skip(train_size).take(val_size)
+    # val_labels = all_train_labels.skip(train_size).take(val_size)
 
-    return train_data, train_labels, val_data, val_labels
+    # train_data = tf.slice(all_train_data, 0, train_size)  
+    # train_labels = tf.slice(all_train_labels, 0, train_size)
+
+    # val_data = tf.slice(all_train_data, train_size, val_size)  
+    # val_labels = tf.slice(all_train_labels, train_size, val_size)  
+
+    # print("val size", len(val_labels))
+    # print("train size", len(train_data))
+    # print("df size", len(train_data))
+
+    return train_data, train_labels #, val_data, val_labels
 
 # TODO: potentially augment training data and one hot encode label vectors?? standardize too? like in hw 5?
 
@@ -65,7 +76,7 @@ def load_train_validation_data():
 
 
 def load_test_data():
-    """load the testing data and return numpy arrays of data and labels"""
+    """load the testing data and return numpy arrays of data and encoded labels"""
     # Get list of all images in testing directory
     test_file_list = []
     for root, _, files in os.walk(os.path.join("data/test/")):
@@ -84,19 +95,16 @@ def load_test_data():
         test_data.append(img_array)
         test_labels.append(letter)
 
-    return np.array(test_data), np.array(test_labels)
+    test_data, test_labels = np.array(test_data), np.array(test_labels)
+    test_labels = label_binarizer.fit_transform(test_labels) # to one hot encode the labels
 
-test_data, test_labels = load_test_data()
-assert len(test_data) == len(test_labels)
-print(f"{len(test_data)} testing samples loaded")
-
-plt.imshow(test_data[17])
-plt.show()
-print(test_labels[17])
-
-test_labels = label_binarizer.fit_transform(test_labels)
+    return test_data, test_labels
 
 
 # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
+train_data, train_labels = load_train_validation_data()
+test_data, test_labels = load_test_data()
 
-train_data, train_labels, val_data, val_labels = load_train_validation_data()
+# print(f"train size: {len(train_data)}, val size: {len(val_data)}, test size: {len(val_labels)}")
+# print(val_labels)
+print(type(train_data), type(test_data))
