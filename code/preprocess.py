@@ -5,6 +5,7 @@ import numpy as np
 from skimage import io, img_as_float32
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import time
 
 class Datasets():
     def __init__(self):
@@ -23,13 +24,13 @@ class Datasets():
         train_data = []
         train_labels = []
         start_start = time.time()
-        for category in categories:
+        for category in self.categories:
             start = time.time()
             category_path = os.path.join('data/train', category)
             i = 0
             for img in os.listdir(category_path):
-                # if i > 20: # to only load some train images for now
-                #     break
+                if i > 20: # to only load some train images for now
+                    break
                 file_path = os.path.join(category_path,img)
                 img_array = img_as_float32(io.imread(file_path))
                 assert img_array.shape == (200,200,3)
@@ -42,11 +43,12 @@ class Datasets():
         print(f"total time to load data {end_end - start_start} seconds")
         return np.array(train_data), np.array(train_labels)
 
-    def split_train_validation_data():
-    """splits train into train and validation (still np arrays)"""
-        train_data, train_labels = load_train_data()
+    def split_train_validation_data(self):
+        """splits train into train and validation (still np arrays)"""
+
+        train_data, train_labels = self.load_train_data()
         print("inside split, loaded data")
-        train_labels = label_binarizer.fit_transform(train_labels)
+        train_labels = self.label_binarizer.fit_transform(train_labels)
         print("one hot encoded the labels")
 
         dataset_size = len(train_labels)
