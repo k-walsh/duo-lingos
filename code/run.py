@@ -1,8 +1,10 @@
-import os
 import hyperparameters as hp
 from datetime import datetime
 import tensorflow as tf
 from models import VGGModel
+#from preprocess import split_train_validation_data, load_test_data
+from tensorboard_utils import CustomModelSaver
+import os
 from tensorboard_utils import \
         ImageLabelingLogger, CustomModelSaver
 from preprocess import Datasets
@@ -20,12 +22,12 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
     val_labels = tf.gather(datasets.val_labels, rand_i_val)
 
     callback_list = [
-        # tf.keras.callbacks.TensorBoard(
-        #     log_dir=logs_path,
-        #     update_freq='batch',
-        #     profile_batch=0),
-        # ImageLabelingLogger(logs_path, datasets),
-        # CustomModelSaver(checkpoint_path, hp.max_num_weights)
+        tf.keras.callbacks.TensorBoard(
+             log_dir=logs_path,
+             update_freq='batch',
+             profile_batch=0),
+        ImageLabelingLogger(logs_path, datasets),
+        CustomModelSaver(checkpoint_path, hp.max_num_weights)
     ]
 
     model.fit(
@@ -81,7 +83,6 @@ def main():
         metrics=["accuracy"])
     
     train(model, datasets, checkpoint_path, logs_path, init_epoch)
-
     print("done training")
 
     test(model, datasets)

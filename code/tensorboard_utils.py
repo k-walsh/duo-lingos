@@ -197,7 +197,7 @@ class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
 class CustomModelSaver(tf.keras.callbacks.Callback):
     """ Custom Keras callback for saving weights of networks. """
 
-    def __init__(self, checkpoint_dir,max_num_weights=5):
+    def __init__(self, checkpoint_dir, max_num_weights=5):
         super(CustomModelSaver, self).__init__()
 
         self.checkpoint_dir = checkpoint_dir
@@ -209,14 +209,13 @@ class CustomModelSaver(tf.keras.callbacks.Callback):
         min_acc_file, max_acc_file, max_acc, num_weights = \
             self.scan_weight_files()
 
-        cur_acc = logs["val_sparse_categorical_accuracy"]
+        cur_acc = logs["val_accuracy"]
 
-        # Only save weights if test accuracy exceeds the previous best
+        # Only save weights if val accuracy exceeds the previous best
         # weight file
         if cur_acc > max_acc:
             save_name = "weights.e{0:03d}-acc{1:.4f}.h5".format(
                 epoch, cur_acc)
-
 
             save_location = self.checkpoint_dir + os.sep + "vgg." + save_name
             print(("\nEpoch {0:03d} TEST accuracy ({1:.4f}) EXCEEDED previous "

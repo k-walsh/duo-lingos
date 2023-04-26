@@ -5,9 +5,6 @@ import numpy as np
 from skimage import io, img_as_float32
 import matplotlib.pyplot as plt
 import tensorflow as tf
-# import pandas as pd
-
-
 
 class Datasets():
     def __init__(self):
@@ -25,25 +22,32 @@ class Datasets():
         """load the training data and returns 2 numpy arrays of the training data and labels"""
         train_data = []
         train_labels = []
-        for category in self.categories:
+        start_start = time.time()
+        for category in categories:
+            start = time.time()
             category_path = os.path.join('data/train', category)
-            print(category)
             i = 0
             for img in os.listdir(category_path):
-                if i > 10: # to only load some train images for now
-                    break
+                # if i > 20: # to only load some train images for now
+                #     break
                 file_path = os.path.join(category_path,img)
                 img_array = img_as_float32(io.imread(file_path))
                 assert img_array.shape == (200,200,3)
                 train_data.append(img_array)
                 train_labels.append(category)
                 i += 1
+            end = time.time()
+            print(category, end-start, "seconds")
+        end_end = time.time()
+        print(f"total time to load data {end_end - start_start} seconds")
         return np.array(train_data), np.array(train_labels)
 
-    def split_train_validation_data(self):
-        """splits train into train and validation (still np arrays)"""
-        train_data, train_labels = self.load_train_data()
-        train_labels = self.label_binarizer.fit_transform(train_labels)
+    def split_train_validation_data():
+    """splits train into train and validation (still np arrays)"""
+        train_data, train_labels = load_train_data()
+        print("inside split, loaded data")
+        train_labels = label_binarizer.fit_transform(train_labels)
+        print("one hot encoded the labels")
 
         dataset_size = len(train_labels)
         train_size = int(dataset_size * 0.80)
@@ -53,6 +57,7 @@ class Datasets():
         rand_indices = random.sample(range(1, dataset_size), val_size)
         val_data = train_data[rand_indices]
         val_labels = train_labels[rand_indices]
+        print("split train and val data")
 
         train_data = np.delete(train_data, rand_indices, axis=0)
         train_labels = np.delete(train_labels, rand_indices, axis=0)
@@ -65,7 +70,6 @@ class Datasets():
     # TODO: potentially augment training data and one hot encode label vectors?? standardize too? like in hw 5?
     # TODO: do we care about images being rbg vs black white ??
     # TODO: divide images by 255??? normalize
-
 
     def load_test_data(self):
         """load the testing data and return numpy arrays of data and encoded labels"""
@@ -91,6 +95,5 @@ class Datasets():
         test_labels = self.label_binarizer.fit_transform(test_labels) # to one hot encode the labels
 
         return test_data, test_labels
-
 
 # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
