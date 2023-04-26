@@ -3,8 +3,10 @@ from datetime import datetime
 import tensorflow as tf
 from models import VGGModel
 from preprocess import split_train_validation_data, load_test_data
+from tensorboard_utils import CustomModelSaver
+import os
 
-def train(model, train_data, train_labels, val_data, val_labels, init_epoch):
+def train(model, train_data, train_labels, val_data, val_labels, checkpoint_path, logs_path, init_epoch):
     print("inside train")
 
     # shuffle training data 
@@ -17,13 +19,22 @@ def train(model, train_data, train_labels, val_data, val_labels, init_epoch):
     val_data = tf.gather(val_data, rand_i_val)
     val_labels = tf.gather(val_labels, rand_i_val)
 
+    callback_list = [
+        # tf.keras.callbacks.TensorBoard(
+        #     log_dir=logs_path,
+        #     update_freq='batch',
+        #     profile_batch=0),
+        # ImageLabelingLogger(logs_path, datasets),
+        CustomModelSaver(checkpoint_path, hp.max_num_weights)
+    ]
+
     model.fit(
         x=train_data, 
         y=train_labels,
         validation_data=(val_data, val_labels),
         epochs=hp.num_epochs,
         batch_size=None,            # Required as None as we use an ImageDataGenerator; see preprocess.py get_data()
-        callbacks=None,
+        callbacks=callback_list,
         initial_epoch=init_epoch,
     )
 
@@ -41,6 +52,12 @@ def main():
     time_now = datetime.now()
     timestamp = time_now.strftime("%m%d%y-%H%M%S")
     init_epoch = 0
+
+    checkpoint_path = "checkpoints" + os.sep + "vgg_model" + os.sep + timestamp + os.sep
+    logs_path = "logs" + os.sep + "vgg_model" + os.sep + timestamp + os.sep
+    os.makedirs(checkpoint_path)
+
+    print("loading data")
 
     train_data, train_labels, val_data, val_labels = split_train_validation_data()
     print(f"{len(train_data)} training samples loaded")
@@ -61,7 +78,7 @@ def main():
         loss=model.loss_fn,
         metrics=["accuracy"])
     
-    train(model, train_data, train_labels, val_data, val_labels, init_epoch)
+    train(model, train_data, train_labels, val_data, val_labels, checkpoint_path, logs_path, init_epoch)
     print("done training")
 
     test(model, test_data, test_labels)
