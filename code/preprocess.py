@@ -20,7 +20,6 @@ def load_train_data():
     for category in categories:
         category_path = os.path.join('data/train', category)
         print(category)
-        # class_letter = categories.index(category)
         i = 0
         for img in os.listdir(category_path):
             if i > 50: # to only load some train images for now
@@ -87,18 +86,3 @@ def load_test_data():
 
 
 # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
-
-
-# def to_pandas_csv():
-#     train_data, train_labels, val_data, val_labels = split_train_validation_data()
-#     test_data, test_labels = load_test_data()
-
-#     df = pd.DataFrame(
-#         {'train_data': [train_data], 'train_labels': [train_labels],
-#          'val_data': [val_data], 'val_labels': [val_labels],
-#          'test_data': [test_data], 'test_labels': [test_labels]}
-#     )
-
-#     df.to_csv('preprocessed_data.csv')
-
-# to_pandas_csv()
