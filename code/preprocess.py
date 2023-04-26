@@ -5,6 +5,7 @@ import numpy as np
 from skimage import io, img_as_float32
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import pandas as pd
 
 # https://www.analyticsvidhya.com/blog/2021/01/image-classification-using-convolutional-neural-networks-a-step-by-step-guide/
 categories = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -22,7 +23,7 @@ def load_train_data():
         # class_letter = categories.index(category)
         i = 0
         for img in os.listdir(category_path):
-            if i > 200: # to only load some train images for now
+            if i > 50: # to only load some train images for now
                 break
             file_path = os.path.join(category_path,img)
             img_array = img_as_float32(io.imread(file_path))
@@ -32,49 +33,31 @@ def load_train_data():
             i += 1
     return np.array(train_data), np.array(train_labels)
 
-def load_train_validation_data():
-    """
-    * shuffles the output of load_train_data so everything is randomly shuffled
-    * splits the training data into validation and train sets
-    * returns the train data, train labels, validation data, and validation labels as tensors
-    """
+def split_train_validation_data():
+    """splits train into train and validation (still np arrays)"""
     train_data, train_labels = load_train_data()
     train_labels = label_binarizer.fit_transform(train_labels)
 
-    # shuffle the data so not in alphabet order - tf.gather shuffles the data & labels together
-    rand_i = tf.random.shuffle(range(len(train_labels)), seed=12)
-    all_train_data = tf.gather(train_data, rand_i)
-    all_train_labels = tf.gather(train_labels, rand_i)
-
-    dataset_size = len(all_train_labels)
+    dataset_size = len(train_labels)
     train_size = int(dataset_size * 0.80)
-    val_size = dataset_size - train_size   
-    print(f"dataset size {dataset_size}, train_size {train_size}, val_size {val_size}")
-    assert train_size + val_size == dataset_size
+    val_size = dataset_size - train_size  
 
-    # train_data = all_train_data.take(train_size)  
-    # train_labels = all_train_labels.take(train_size)
+    # randomly choose 20% indices to be indices of the validation data
+    rand_indices = random.sample(range(1, dataset_size), val_size)
+    val_data = train_data[rand_indices]
+    val_labels = train_labels[rand_indices]
 
-    # val_data = all_train_data.skip(train_size).take(val_size)
-    # val_labels = all_train_labels.skip(train_size).take(val_size)
+    train_data = np.delete(train_data, rand_indices, axis=0)
+    train_labels = np.delete(train_labels, rand_indices, axis=0)
 
-    # train_data = tf.slice(all_train_data, 0, train_size)  
-    # train_labels = tf.slice(all_train_labels, 0, train_size)
+    assert len(train_data) + len(val_data) == dataset_size
+    assert len(train_labels) + len(val_labels) == dataset_size
 
-    # val_data = tf.slice(all_train_data, train_size, val_size)  
-    # val_labels = tf.slice(all_train_labels, train_size, val_size)  
-
-    # print("val size", len(val_labels))
-    # print("train size", len(train_data))
-    # print("df size", len(train_data))
-
-    return train_data, train_labels #, val_data, val_labels
+    return train_data, train_labels, val_data, val_labels
 
 # TODO: potentially augment training data and one hot encode label vectors?? standardize too? like in hw 5?
-
 # TODO: do we care about images being rbg vs black white ??
-
-# TODO: divide images by 255???
+# TODO: divide images by 255??? normalize
 
 
 def load_test_data():
@@ -104,11 +87,18 @@ def load_test_data():
 
 
 # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
-# train_data, train_labels = load_train_validation_data()
-# test_data, test_labels = load_test_data()
 
-# print(f"train size: {len(train_data)}, val size: {len(val_data)}, test size: {len(val_labels)}")
-# print(val_labels)
-# print(type(train_data), type(test_data))
 
-# print("HIIII")
+# def to_pandas_csv():
+#     train_data, train_labels, val_data, val_labels = split_train_validation_data()
+#     test_data, test_labels = load_test_data()
+
+#     df = pd.DataFrame(
+#         {'train_data': [train_data], 'train_labels': [train_labels],
+#          'val_data': [val_data], 'val_labels': [val_labels],
+#          'test_data': [test_data], 'test_labels': [test_labels]}
+#     )
+
+#     df.to_csv('preprocessed_data.csv')
+
+# to_pandas_csv()
