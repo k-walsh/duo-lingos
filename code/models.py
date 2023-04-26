@@ -37,7 +37,6 @@ class VGGModel(tf.keras.Model):
     def loss_fn(labels, predictions):
        """ Loss function for model. """
 
-       # from logits should be FALSE
        loss = tf.keras.losses.CategoricalCrossentropy()(labels, predictions)
 
        return loss
