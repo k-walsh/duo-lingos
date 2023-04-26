@@ -2,8 +2,6 @@ import hyperparameters as hp
 from datetime import datetime
 import tensorflow as tf
 from models import VGGModel
-#from preprocess import split_train_validation_data, load_test_data
-from tensorboard_utils import CustomModelSaver
 import os
 from tensorboard_utils import \
         ImageLabelingLogger, CustomModelSaver
