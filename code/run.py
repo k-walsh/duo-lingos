@@ -12,6 +12,11 @@ def train(model, train_data, train_labels, val_data, val_labels, init_epoch):
     train_data = tf.gather(train_data, rand_i)
     train_labels = tf.gather(train_labels, rand_i)
 
+    # shuffle val data
+    rand_i_val = tf.random.shuffle(range(len(val_labels)))
+    val_data = tf.gather(val_data, rand_i_val)
+    val_labels = tf.gather(val_labels, rand_i_val)
+
     model.fit(
         x=train_data, 
         y=train_labels,
