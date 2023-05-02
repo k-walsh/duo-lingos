@@ -6,16 +6,15 @@ from keras.applications.vgg16 import VGG16
 import hyperparameters as hp
 
 class VGGModel(tf.keras.Model):
-    def __init__(self):
+   def __init__(self):
       super(VGGModel, self).__init__()
-
       self.optimizer =  tf.keras.optimizers.Adam(learning_rate=hp.learning_rate)
- 
+
       self.vgg16 = VGG16(input_shape= (200,200,3),include_top=False,weights='imagenet')
-    
+   
       for layer in self.vgg16.layers:
             layer.trainable = False 
- 
+
       self.head = [
          Flatten(),
          Dense(512, activation='relu'),
@@ -23,22 +22,17 @@ class VGGModel(tf.keras.Model):
          Dense(128, activation='relu'),
          Dense(29, activation='softmax')
       ]
-
-      
       self.head = tf.keras.Sequential(self.head, name="vgg_head")
-
-    def call(self, x):
+   
+   def call(self, x):
       """ Passes the image through the network. """
-
-      x = self.vgg16.call(x)
+      x = self.vgg16(x)
       x = self.head(x)
-
       return x
-
-    @staticmethod
-    def loss_fn(labels, predictions):
+    
+   @staticmethod
+   def loss_fn(labels, predictions):
       """ Loss function for model. """
-
-      loss = tf.keras.losses.CategoricalCrossentropy()(labels, predictions)
-
+      # sparse because labels are integers - from logits false bc softmax returns probabilities
+      loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False)(labels, predictions) 
       return loss
