@@ -79,8 +79,8 @@ def main():
     model.vgg16.summary()
     model.head.summary()
 
-    # TODO: do we have to load the base of the vgg model or is that already done??
-    # 
+    # Load base of VGG model
+    model.vgg16.load_weights('code/vgg16_imagenet.h5', by_name=True)
 
     model.compile(
         optimizer=model.optimizer,
