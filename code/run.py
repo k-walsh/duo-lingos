@@ -25,7 +25,7 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
              update_freq='batch',
              profile_batch=0),
         ImageLabelingLogger(logs_path, datasets),
-        CustomModelSaver(checkpoint_path, hp.max_num_weights)
+        # CustomModelSaver(checkpoint_path, hp.max_num_weights)
     ]
 
     model.fit(

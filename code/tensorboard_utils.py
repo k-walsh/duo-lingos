@@ -130,6 +130,7 @@ class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
 
         self.datasets = datasets
         self.logs_path = logs_path
+        
 
     def on_epoch_end(self, epoch, logs=None):
         self.log_confusion_matrix(epoch, logs)
@@ -202,6 +203,8 @@ class CustomModelSaver(tf.keras.callbacks.Callback):
 
         self.checkpoint_dir = checkpoint_dir
         self.max_num_weights = max_num_weights
+        print("Done setting up custom model saver.")
+
 
     def on_epoch_end(self, epoch, logs=None):
         """ At epoch end, weights are saved to checkpoint directory. """
