@@ -8,6 +8,7 @@ import tensorflow as tf
 import time
 import hyperparameters as hp
 from tensorflow.python.keras import utils as ut
+from PIL import Image
 
 class Datasets():
     def __init__(self):
@@ -47,6 +48,9 @@ class Datasets():
         if bool(self.idx_to_class):
             classes_for_flow = self.classes
 
+        # Directory containing the images
+        self.validate_images('data/train')
+
         # Form image data generator from directory structure
         # just going to load in the training data and then split - the 28 test images aren't worth the hassle
         train_data_gen = data_gen.flow_from_directory(
@@ -59,6 +63,8 @@ class Datasets():
             subset='training')
         
         print("train data gen made")
+
+
 
         val_data_gen = data_gen.flow_from_directory(
             'data/train',
@@ -92,6 +98,32 @@ class Datasets():
         # print("val gen", val_data_gen)
 
         return train_data_gen, val_data_gen
+    
+    def validate_images(self, directory):
+        # Directory containing the images
+
+        # Supported image extensions
+        extensions = ('.jpg')
+
+        # Iterate through the files in the directory
+        for filename in os.listdir(directory):
+            if filename.endswith(extensions):
+                # Load the image and get its format
+                filepath = os.path.join(directory, filename)
+                try:
+                    with Image.open(filepath) as img:
+                        format = img.format
+                        print(f'{filename}: {format}')
+                except OSError:
+                    print(f'{filename} cannot be opened')
+                    # Delete the file if it cannot be opened
+                    os.remove(filepath)
+            else:
+                print(f'{filename} has an unsupported extension')
+                # Delete the file if it has an unsupported extension
+                os.remove(os.path.join(directory, filename))
+
+        print ("images validated")
 
     # def load_test_data(self):
     #     """load the testing data and return numpy arrays of data and encoded labels"""
