@@ -39,7 +39,7 @@ class Datasets():
         
         data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
             preprocessing_function=self.preprocess_fn,
-            validation_split=0.001) # TODO: change back to 0.2 after make sure everything runs
+            validation_split=0.2)
         img_size = hp.img_size
         classes_for_flow = None
 
@@ -93,72 +93,7 @@ class Datasets():
         # print("train labels", train_data_gen.labels[3000])
         # print("val gen", val_data_gen)
 
-        return val_data_gen, val_data_gen # TODO: changed for now but should be train, val
-
-
-
-#     def load_train_data(self):
-#         """load the training data and returns 2 numpy arrays of the training data and labels"""
-#         # train_data = []
-#         # train_labels = []
-#         train_data = None
-#         train_labels = None
-#         start_start = time.time()
-#         for category in self.categories:
-#             start = time.time()
-#             category_path = os.path.join('data/train', category)
-#             i = 0
-#             for img in os.listdir(category_path):
-#                 if i > 20: # to only load some train images for now
-#                     break
-#                 file_path = os.path.join(category_path,img)
-#                 img_array = img_as_float32(io.imread(file_path))
-#                 assert img_array.shape == (200,200,3)
-#                 # train_data.append(img_array)
-#                 # train_labels.append(category)
-#                 if i == 0:
-#                     train_data = np.array(img_array)
-#                     train_labels = np.array(category)
-#                 else:
-#                     train_data = np.append(train_data, img_array, axis=0)
-#                     train_labels = np.append(train_labels, category, axis=0)
-#                 i += 1
-#             end = time.time()
-#             print(category, end-start, "seconds")
-#         end_end = time.time()
-#         print(f"total time to load data {end_end - start_start} seconds")
-#         # return np.array(train_data), np.array(train_labels)
-#         return train_data, train_labels
-
-#     def split_train_validation_data(self):
-#         """splits train into train and validation (still np arrays)"""
-
-#         train_data, train_labels = self.load_train_data()
-#         print("inside split, loaded data")
-#         train_labels = self.label_binarizer.fit_transform(train_labels)
-#         print("one hot encoded the labels")
-
-#         dataset_size = len(train_labels)
-#         train_size = int(dataset_size * 0.80)
-#         val_size = dataset_size - train_size  
-
-#         # randomly choose 20% indices to be indices of the validation data
-#         rand_indices = random.sample(range(1, dataset_size), val_size)
-#         val_data = train_data[rand_indices]
-#         val_labels = train_labels[rand_indices]
-#         print("split train and val data")
-
-#         train_data = np.delete(train_data, rand_indices, axis=0)
-#         train_labels = np.delete(train_labels, rand_indices, axis=0)
-
-#         assert len(train_data) + len(val_data) == dataset_size
-#         assert len(train_labels) + len(val_labels) == dataset_size
-
-#         return train_data, train_labels, val_data, val_labels
-
-#     # TODO: potentially augment training data and one hot encode label vectors?? standardize too? like in hw 5?
-#     # TODO: do we care about images being rbg vs black white ??
-#     # TODO: divide images by 255??? normalize
+        return train_data_gen, val_data_gen
 
     def load_test_data(self):
         """load the testing data and return numpy arrays of data and encoded labels"""
@@ -185,4 +120,3 @@ class Datasets():
 
         return test_data, test_labels
 
-# TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time

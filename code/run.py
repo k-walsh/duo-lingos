@@ -82,7 +82,7 @@ def main():
     model.compile(
         optimizer=model.optimizer,
         loss=model.loss_fn,
-        metrics=["sparse_categorical_accuracy"]) # or just accuracy??
+        metrics=["sparse_categorical_accuracy"])
     
     train(model, datasets, checkpoint_path, logs_path, init_epoch)
     print("done training")
