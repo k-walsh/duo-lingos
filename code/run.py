@@ -20,11 +20,11 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
     # val_labels = tf.gather(datasets.val_labels, rand_i_val)
 
     callback_list = [
-        # tf.keras.callbacks.TensorBoard(
-        #      log_dir=logs_path,
-        #      update_freq='batch',
-        #      profile_batch=0),
-        # ImageLabelingLogger(logs_path, datasets),
+        tf.keras.callbacks.TensorBoard(
+             log_dir=logs_path,
+             update_freq='batch',
+             profile_batch=0),
+        ImageLabelingLogger(logs_path, datasets),
         CustomModelSaver(checkpoint_path, hp.max_num_weights)
     ]
 
@@ -66,9 +66,6 @@ def main():
     checkpoint_path = "checkpoints" + os.sep + "vgg_model" + os.sep + timestamp + os.sep
     logs_path = "logs" + os.sep + "vgg_model" + os.sep + timestamp + os.sep
     os.makedirs(checkpoint_path)
-
-    print(f"{len(datasets.train_data)} training samples loaded")
-    print(f"{len(datasets.val_data)} validation samples loaded")
 
     # print(f"{len(datasets.test_data)} testing samples loaded")
 

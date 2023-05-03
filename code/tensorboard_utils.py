@@ -50,7 +50,7 @@ class ImageLabelingLogger(tf.keras.callbacks.Callback):
         count_all = 0
         count_misclassified = 0
         
-        for batch in self.datasets.test_data:
+        for batch in self.datasets.val_data: # TODO: test data
             misclassified = []
             correct_labels = []
             wrong_labels = []
@@ -140,7 +140,7 @@ class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
         test_pred = []
         test_true = []
         count = 0
-        for i in self.datasets.test_data:
+        for i in self.datasets.val_data:
             test_pred.append(self.model.predict(i[0]))
             test_true.append(i[1])
             count += 1
@@ -209,7 +209,7 @@ class CustomModelSaver(tf.keras.callbacks.Callback):
         min_acc_file, max_acc_file, max_acc, num_weights = \
             self.scan_weight_files()
 
-        cur_acc = logs["val_accuracy"]
+        cur_acc = logs["val_sparse_categorical_accuracy"]
 
         # Only save weights if val accuracy exceeds the previous best
         # weight file

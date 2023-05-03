@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import time
 import hyperparameters as hp
+from tensorflow.python.keras import utils as ut
 
 class Datasets():
     def __init__(self):
@@ -26,6 +27,7 @@ class Datasets():
         self.train_data, self.val_data = self.load_data()
         # self.train_data, self.train_labels, self.val_data, self.val_labels = self.split_train_validation_data()
         # self.test_data, self.test_labels = self.load_test_data()
+        self.test_data, self.test_labels = self.load_test_data()
 
     def preprocess_fn(self, img):
         """ Preprocess function for ImageDataGenerator. """
@@ -37,7 +39,7 @@ class Datasets():
         
         data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
             preprocessing_function=self.preprocess_fn,
-            validation_split=0.2)
+            validation_split=0.001) # TODO: change back to 0.2 after make sure everything runs
         img_size = hp.img_size
         classes_for_flow = None
 
@@ -91,11 +93,7 @@ class Datasets():
         # print("train labels", train_data_gen.labels[3000])
         # print("val gen", val_data_gen)
 
-        # could do this but did above instead
-        # tf.keras.utils.split_dataset(
-        #     data_gen, left_size=0.7, right_size=0.3, shuffle=True
-        # )
-        return train_data_gen, val_data_gen
+        return val_data_gen, val_data_gen # TODO: changed for now but should be train, val
 
 
 
@@ -162,29 +160,29 @@ class Datasets():
 #     # TODO: do we care about images being rbg vs black white ??
 #     # TODO: divide images by 255??? normalize
 
-#     def load_test_data(self):
-#         """load the testing data and return numpy arrays of data and encoded labels"""
-#         # Get list of all images in testing directory
-#         test_file_list = []
-#         for root, _, files in os.walk(os.path.join("data/test/")):
-#             for name in files:
-#                 test_file_list.append(os.path.join(root, name))
+    def load_test_data(self):
+        """load the testing data and return numpy arrays of data and encoded labels"""
+        # Get list of all images in testing directory
+        test_file_list = []
+        for root, _, files in os.walk(os.path.join("data/test/")):
+            for name in files:
+                test_file_list.append(os.path.join(root, name))
 
-#         # Shuffle filepaths
-#         random.shuffle(test_file_list)
+        # Shuffle filepaths
+        random.shuffle(test_file_list)
 
-#         test_data = []
-#         test_labels = []
-#         for file_path in test_file_list:
-#             letter = file_path.split("/")[2].split("_")[0]
-#             img_array = img_as_float32(io.imread(file_path))
-#             assert img_array.shape == (200,200,3)
-#             test_data.append(img_array)
-#             test_labels.append(letter)
+        test_data = []
+        test_labels = []
+        for file_path in test_file_list:
+            letter = file_path.split("/")[2].split("_")[0]
+            img_array = img_as_float32(io.imread(file_path))
+            assert img_array.shape == (200,200,3)
+            test_data.append(img_array)
+            test_labels.append(letter)
 
-#         test_data, test_labels = np.array(test_data), np.array(test_labels)
-#         test_labels = self.label_binarizer.fit_transform(test_labels) # to one hot encode the labels
+        test_data, test_labels = np.array(test_data), np.array(test_labels)
+        test_labels = self.label_binarizer.fit_transform(test_labels) # to one hot encode the labels
 
-#         return test_data, test_labels
+        return test_data, test_labels
 
-# # TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time
+# TODO: maybe save these arrays as csvs so we can just read them in and don't have to do all this preprocessing each time

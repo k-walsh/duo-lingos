@@ -67,6 +67,7 @@ class VGGModel(tf.keras.Model):
       
    def call(self, x):
       """ Passes the image through the network. """
+      # print(x.shape) # <-- is (1, 200, 200, 3)
       x = self.vgg16(x)
       x = self.head(x)
       return x
