@@ -28,6 +28,8 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
         CustomModelSaver(checkpoint_path, hp.max_num_weights)
     ]
 
+    print("callback list done")
+
     model.fit(
         # x=train_data, 
         # y=train_labels,
@@ -39,6 +41,7 @@ def train(model, datasets, checkpoint_path, logs_path, init_epoch):
         callbacks=callback_list,
         initial_epoch=init_epoch,
     )
+    print("modelfit done")
 
 def test(model, datasets):
     """ Testing routine. """
