@@ -41,6 +41,7 @@ class ImageLabelingLogger(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         self.log_image_labels(epoch, logs)
+        print("on epoch end.")
 
     def log_image_labels(self, epoch_num, logs):
         """ Writes a plot of test images and their predicted labels
@@ -120,6 +121,8 @@ class ImageLabelingLogger(tf.keras.callbacks.Callback):
                 img = tf.expand_dims(img, axis=0)
                 tf.summary.image("1 Example @ epoch " + str(epoch_num) + ": " + self.datasets.idx_to_class[label] + " misclassified as " + self.datasets.idx_to_class[wrong], 
                                  img, step=epoch_num)
+        
+        print("log image labels.")
 
 class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
     """ Keras callback for logging a confusion matrix for viewing
