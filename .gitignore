@@ -8,7 +8,7 @@
 **/*.out
 **/*.synctex.gz
 **/*.log
-**/*.pdf
+# **/*.pdf
 
 **/.DS_Store/
 .vscode
@@ -42,5 +42,23 @@ code/checkpoints/*
 code/misclassified/*
 
 # ignore the data folder
-data/
+data/train/A/
+data/train/B/
+data/train/C/
+data/train/D/
+data/train/E/
+data/train/F/
+data/train/G/
+data/train/H/
+data/train/I/
+data/train/J/
+data/train/K/
+data/train/L/
+data/train/M/
+data/train/N/
+data/train/O/
+data/train/P/
+data/train/Q/
+data/train/R/
+data/train/S/
 .DS_Store
