@@ -9,11 +9,8 @@ import numpy as np
 
 data = Datasets()
 
-def process_image(img):
-    """takes in an img (as a np array) and processes it for the vgg model"""
-    return tf.keras.applications.vgg16.preprocess_input(img)
-
-def predict_handshape(img):
+def load_model():
+    """Load and compile the model from the checkpoint"""
     model = VGGModel()
     model(tf.keras.Input(shape=(200, 200, 3)))
 
@@ -29,7 +26,11 @@ def predict_handshape(img):
         loss=model.loss_fn,
         metrics=["sparse_categorical_accuracy"])
     
-    img = process_image(img)
+    return model
+
+def predict_handshape(model, img):
+    """Use the model to predict the letter for a given image (in np array format)"""
+    img = tf.keras.applications.vgg16.preprocess_input(img)
     img = np.expand_dims(img, axis=0)
     pred = model.predict(img, batch_size=4, verbose=1)
 
