@@ -54,7 +54,7 @@ class Datasets():
         # Form image data generator from directory structure
         # just going to load in the training data and then split - the 28 test images aren't worth the hassle
         train_data_gen = data_gen.flow_from_directory(
-            'data/train',
+            'data/train/A',
             target_size=(img_size, img_size),
             class_mode='sparse',
             batch_size=hp.batch_size,
@@ -119,9 +119,7 @@ class Datasets():
                                 format = img.format
                                 print(f'{filename}: {format}')
                         except OSError:
-                            print(f'{filename} cannot be opened')
-                            # Delete the file if it cannot be opened
-                            # os.remove(os.path.join(folderpath,filepath))
+                            return
                     else:
                         print(f'{filename} has an unsupported extension')
                         # Delete the file if it has an unsupported extension
