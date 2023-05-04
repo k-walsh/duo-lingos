@@ -1,4 +1,5 @@
 import cv2
+from predict import predict_handshape
 
 # how to add text: https://www.geeksforgeeks.org/python-opencv-write-text-on-video/
 # how to take video: https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
@@ -13,6 +14,9 @@ while (True):
     ret, frame = cam.read()
     frame = cv2.flip(frame, 1)
 
+    # print(type(frame))
+    print(frame.shape)
+
     # add box for where to place hand 
     end_x = int(width * 0.9)
     start_x = end_x - 400
@@ -20,16 +24,18 @@ while (True):
     end_y = start_y + 400
     cv2.rectangle(frame, (start_x,start_y), (end_x,end_y), (255,0,0), 2)
 
-    # TODO: take a screenshot
-    # crop screenshot to just the box
-    # feed that image into the predict method
-    # have the predict method return a letter
-    # that letter is displayed on the screen (below)
+    # crop to the box frame, resize
+    box_img = frame[start_y:end_y, start_x:end_x]
+    img = cv2.resize(box_img, (200,200), 0.5, 0.5)
+
+    # feed that image into the predict method of the model
+    pred_letter = predict_handshape(img)
+    print(pred_letter)
 
     # add text
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(frame, 
-                'A', 
+                pred_letter, 
                 (int(width*0.15), int(width*0.15)), 
                 font, 4, 
                 (0, 255, 255), 
