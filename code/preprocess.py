@@ -49,12 +49,12 @@ class Datasets():
             classes_for_flow = self.classes
 
         # Directory containing the images
-        self.validate_images('data/train')
+        self.validate_images('data/train/')
 
         # Form image data generator from directory structure
         # just going to load in the training data and then split - the 28 test images aren't worth the hassle
         train_data_gen = data_gen.flow_from_directory(
-            'data/train/A',
+            'data/train/',
             target_size=(img_size, img_size),
             class_mode='sparse',
             batch_size=hp.batch_size,
@@ -67,7 +67,7 @@ class Datasets():
 
 
         val_data_gen = data_gen.flow_from_directory(
-            'data/train',
+            'data/train/',
             target_size=(img_size, img_size),
             class_mode='sparse',
             batch_size=hp.batch_size,
@@ -80,11 +80,12 @@ class Datasets():
         # Setup the dictionaries if not already done
         if not bool(self.idx_to_class):
             unordered_classes = []
-            for dir_name in os.listdir('data/train'):
-                if os.path.isdir(os.path.join('data/train', dir_name)):
+            for dir_name in os.listdir('data/train/'):
+                if os.path.isdir(os.path.join('data/train/', dir_name)):
                     unordered_classes.append(dir_name)
 
             for img_class in unordered_classes:
+                print[img_class]
                 self.idx_to_class[train_data_gen.class_indices[img_class]] = img_class
                 self.class_to_idx[img_class] = int(train_data_gen.class_indices[img_class])
                 self.classes[int(train_data_gen.class_indices[img_class])] = img_class
