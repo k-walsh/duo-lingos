@@ -61,8 +61,6 @@ class Datasets():
             shuffle=True,
             classes=classes_for_flow,
             subset='training')
-        
-        print(train_data_gen)
 
 
 
@@ -123,7 +121,7 @@ class Datasets():
                     else:
                         print(f'{filename} has an unsupported extension')
                         # Delete the file if it has an unsupported extension
-                        os.remove(os.path.join(directory, filename))
+                        os.remove(os.path.join(folderpath, filename))
 
         print ("images validated")
 
