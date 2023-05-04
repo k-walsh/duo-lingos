@@ -121,7 +121,7 @@ class Datasets():
                         except OSError:
                             print(f'{filename} cannot be opened')
                             # Delete the file if it cannot be opened
-                            os.remove(filepath)
+                            # os.remove(os.path.join(folderpath,filepath))
                     else:
                         print(f'{filename} has an unsupported extension')
                         # Delete the file if it has an unsupported extension
