@@ -106,22 +106,26 @@ class Datasets():
         extensions = ('.jpg')
 
         # Iterate through the files in the directory
-        for filename in os.listdir(directory):
-            if filename.endswith(extensions):
-                # Load the image and get its format
-                filepath = os.path.join(directory, filename)
-                try:
-                    with Image.open(filepath) as img:
-                        format = img.format
-                        print(f'{filename}: {format}')
-                except OSError:
-                    print(f'{filename} cannot be opened')
-                    # Delete the file if it cannot be opened
-                    os.remove(filepath)
-            else:
-                print(f'{filename} has an unsupported extension')
-                # Delete the file if it has an unsupported extension
-                os.remove(os.path.join(directory, filename))
+        for foldername in os.listdir(directory):
+            folderpath = os.path.join(directory, foldername)
+            if os.path.isdir(folderpath):
+            # Iterate through the files in the folder
+                for filename in os.listdir(folderpath):
+                    if filename.endswith(extensions):
+                        # Load the image and get its format
+                        filepath = os.path.join(directory, filename)
+                        try:
+                            with Image.open(filepath) as img:
+                                format = img.format
+                                print(f'{filename}: {format}')
+                        except OSError:
+                            print(f'{filename} cannot be opened')
+                            # Delete the file if it cannot be opened
+                            os.remove(filepath)
+                    else:
+                        print(f'{filename} has an unsupported extension')
+                        # Delete the file if it has an unsupported extension
+                        os.remove(os.path.join(directory, filename))
 
         print ("images validated")
 
