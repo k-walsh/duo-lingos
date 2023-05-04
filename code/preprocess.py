@@ -85,7 +85,7 @@ class Datasets():
                     unordered_classes.append(dir_name)
 
             for img_class in unordered_classes:
-                print[img_class]
+                print(img_class)
                 self.idx_to_class[train_data_gen.class_indices[img_class]] = img_class
                 self.class_to_idx[img_class] = int(train_data_gen.class_indices[img_class])
                 self.classes[int(train_data_gen.class_indices[img_class])] = img_class
