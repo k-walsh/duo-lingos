@@ -27,6 +27,8 @@ class Datasets():
 
         self.train_data, self.val_data = self.load_data()
         # self.train_data, self.train_labels, self.val_data, self.val_labels = self.split_train_validation_data()
+        # self.test_data, self.test_labels = self.load_test_data()
+        # self.test_data, self.test_labels = self.load_test_data()
 
     def preprocess_fn(self, img):
         """ Preprocess function for ImageDataGenerator. """
@@ -37,6 +39,11 @@ class Datasets():
         "inside load data"
         
         data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rotation_range=5,
+            brightness_range=[0.8,1.2],
+            width_shift_range=0.2, 
+            height_shift_range=0.2,
+            zoom_range=0.2,
             preprocessing_function=self.preprocess_fn,
             validation_split=0.2)
         img_size = hp.img_size
@@ -99,31 +106,6 @@ class Datasets():
     
     def validate_images(self, directory):
         # Directory containing the images
-
-        # Supported image extensions
-        extensions = ('.jpg')
-
-        # Iterate through the files in the directory
-        for foldername in os.listdir(directory):
-            folderpath = os.path.join(directory, foldername)
-            if os.path.isdir(folderpath):
-            # Iterate through the files in the folder
-                for filename in os.listdir(folderpath):
-                    if filename.endswith(extensions):
-                        # Load the image and get its format
-                        filepath = os.path.join(directory, filename)
-                        try:
-                            with Image.open(filepath) as img:
-                                format = img.format
-                                print(f'{filename}: {format}')
-                        except OSError:
-                            return
-                    else:
-                        print(f'{filename} has an unsupported extension')
-                        # Delete the file if it has an unsupported extension
-                        os.remove(os.path.join(folderpath, filename))
-
-        print ("images validated")
 
     # def load_test_data(self):
     #     """load the testing data and return numpy arrays of data and encoded labels"""
