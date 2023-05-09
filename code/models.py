@@ -1,6 +1,6 @@
 import tensorflow as tf
 from keras.layers import \
-       Conv2D, MaxPool2D, Flatten, Dense
+       Conv2D, MaxPool2D, Flatten, Dense, Dropout
 # from keras.applications.vgg16 import VGG16
 # from keras.models import Model
 
@@ -57,8 +57,10 @@ class VGGModel(tf.keras.Model):
       self.head = [
          Flatten(),
          Dense(512, activation='relu'),
+         Dropout(0.1),
          Dense(256, activation='relu'),
          Dense(128, activation='relu'),
+         Dropout(0.1),
          Dense(hp.num_classes, activation='softmax')
       ]
 

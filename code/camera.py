@@ -45,7 +45,8 @@ while (True):
     cv2.imshow('frame', frame)
 
     # hit q to quit
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if (cv2.waitKey(1) & 0xFF) == ord('q'):
+        cv2.destroyAllWindows()
         break
 
 # after loop release cam object

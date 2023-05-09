@@ -18,7 +18,8 @@ def load_model():
     # model.head.summary()
 
     model.vgg16.load_weights('code/vgg16_imagenet.h5', by_name=True)
-    model_checkpoint_path = 'checkpoints/vgg_model/050223-210825/vgg.weights.e003-acc0.9770.h5'
+    # model_checkpoint_path = 'checkpoints/vgg_model/050423-142218/vgg.weights.e013-acc0.6277.h5'
+    model_checkpoint_path = 'checkpoints/vgg_model/050423-142218/vgg.weights.e006-acc0.6088.h5'
     model.head.load_weights(model_checkpoint_path, by_name=False)
 
     model.compile(

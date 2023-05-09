@@ -27,7 +27,7 @@ class Datasets():
         self.train_data, self.val_data = self.load_data()
         # self.train_data, self.train_labels, self.val_data, self.val_labels = self.split_train_validation_data()
         # self.test_data, self.test_labels = self.load_test_data()
-        self.test_data, self.test_labels = self.load_test_data()
+        # self.test_data, self.test_labels = self.load_test_data()
 
     def preprocess_fn(self, img):
         """ Preprocess function for ImageDataGenerator. """
@@ -38,6 +38,11 @@ class Datasets():
         "inside load data"
         
         data_gen = tf.keras.preprocessing.image.ImageDataGenerator(
+            rotation_range=5,
+            brightness_range=[0.8,1.2],
+            width_shift_range=0.2, 
+            height_shift_range=0.2,
+            zoom_range=0.2,
             preprocessing_function=self.preprocess_fn,
             validation_split=0.2)
         img_size = hp.img_size
@@ -95,28 +100,28 @@ class Datasets():
 
         return train_data_gen, val_data_gen
 
-    def load_test_data(self):
-        """load the testing data and return numpy arrays of data and encoded labels"""
-        # Get list of all images in testing directory
-        test_file_list = []
-        for root, _, files in os.walk(os.path.join("data/test/")):
-            for name in files:
-                test_file_list.append(os.path.join(root, name))
+    # def load_test_data(self):
+    #     """load the testing data and return numpy arrays of data and encoded labels"""
+    #     # Get list of all images in testing directory
+    #     test_file_list = []
+    #     for root, _, files in os.walk(os.path.join("data/test/")):
+    #         for name in files:
+    #             test_file_list.append(os.path.join(root, name))
 
-        # Shuffle filepaths
-        random.shuffle(test_file_list)
+    #     # Shuffle filepaths
+    #     random.shuffle(test_file_list)
 
-        test_data = []
-        test_labels = []
-        for file_path in test_file_list:
-            letter = file_path.split("/")[2].split("_")[0]
-            img_array = img_as_float32(io.imread(file_path))
-            assert img_array.shape == (200,200,3)
-            test_data.append(img_array)
-            test_labels.append(letter)
+    #     test_data = []
+    #     test_labels = []
+    #     for file_path in test_file_list:
+    #         letter = file_path.split("/")[2].split("_")[0]
+    #         img_array = img_as_float32(io.imread(file_path))
+    #         assert img_array.shape == (200,200,3)
+    #         test_data.append(img_array)
+    #         test_labels.append(letter)
 
-        test_data, test_labels = np.array(test_data), np.array(test_labels)
-        test_labels = self.label_binarizer.fit_transform(test_labels) # to one hot encode the labels
+    #     test_data, test_labels = np.array(test_data), np.array(test_labels)
+    #     test_labels = self.label_binarizer.fit_transform(test_labels) # to one hot encode the labels
 
-        return test_data, test_labels
+    #     return test_data, test_labels
 
