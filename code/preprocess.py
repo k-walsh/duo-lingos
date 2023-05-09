@@ -8,6 +8,7 @@ import tensorflow as tf
 import time
 import hyperparameters as hp
 from tensorflow.python.keras import utils as ut
+from PIL import Image
 
 class Datasets():
     def __init__(self):
@@ -54,21 +55,24 @@ class Datasets():
         if bool(self.idx_to_class):
             classes_for_flow = self.classes
 
+        # Directory containing the images
+        self.validate_images('data/train/')
+
         # Form image data generator from directory structure
         # just going to load in the training data and then split - the 28 test images aren't worth the hassle
         train_data_gen = data_gen.flow_from_directory(
-            'data/train',
+            'data/train/',
             target_size=(img_size, img_size),
             class_mode='sparse',
             batch_size=hp.batch_size,
             shuffle=True,
             classes=classes_for_flow,
             subset='training')
-        
-        print("train data gen made")
+
+
 
         val_data_gen = data_gen.flow_from_directory(
-            'data/train',
+            'data/train/',
             target_size=(img_size, img_size),
             class_mode='sparse',
             batch_size=hp.batch_size,
@@ -81,8 +85,8 @@ class Datasets():
         # Setup the dictionaries if not already done
         if not bool(self.idx_to_class):
             unordered_classes = []
-            for dir_name in os.listdir('data/train'):
-                if os.path.isdir(os.path.join('data/train', dir_name)):
+            for dir_name in os.listdir('data/train/'):
+                if os.path.isdir(os.path.join('data/train/', dir_name)):
                     unordered_classes.append(dir_name)
 
             for img_class in unordered_classes:
@@ -99,6 +103,9 @@ class Datasets():
         # print("val gen", val_data_gen)
 
         return train_data_gen, val_data_gen
+    
+    def validate_images(self, directory):
+        # Directory containing the images
 
     # def load_test_data(self):
     #     """load the testing data and return numpy arrays of data and encoded labels"""

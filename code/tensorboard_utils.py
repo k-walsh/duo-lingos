@@ -17,12 +17,14 @@ import hyperparameters as hp
 def plot_to_image(figure):
     """ Converts a pyplot figure to an image tensor. """
 
+    print("what do u do")
     buf = io.BytesIO()
     plt.savefig(buf, format='png')
     plt.close(figure)
     buf.seek(0)
     image = tf.image.decode_png(buf.getvalue(), channels=4)
     image = tf.expand_dims(image, 0)
+    print("what have u done")
 
     return image
 
@@ -41,6 +43,7 @@ class ImageLabelingLogger(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         self.log_image_labels(epoch, logs)
+        print("on epoch end.")
 
     def log_image_labels(self, epoch_num, logs):
         """ Writes a plot of test images and their predicted labels
@@ -120,6 +123,8 @@ class ImageLabelingLogger(tf.keras.callbacks.Callback):
                 img = tf.expand_dims(img, axis=0)
                 tf.summary.image("1 Example @ epoch " + str(epoch_num) + ": " + self.datasets.idx_to_class[label] + " misclassified as " + self.datasets.idx_to_class[wrong], 
                                  img, step=epoch_num)
+        
+        print("log image labels.")
 
 class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
     """ Keras callback for logging a confusion matrix for viewing
@@ -130,6 +135,7 @@ class ConfusionMatrixLogger(tf.keras.callbacks.Callback):
 
         self.datasets = datasets
         self.logs_path = logs_path
+        
 
     def on_epoch_end(self, epoch, logs=None):
         self.log_confusion_matrix(epoch, logs)
@@ -202,6 +208,8 @@ class CustomModelSaver(tf.keras.callbacks.Callback):
 
         self.checkpoint_dir = checkpoint_dir
         self.max_num_weights = max_num_weights
+        print("Done setting up custom model saver.")
+
 
     def on_epoch_end(self, epoch, logs=None):
         """ At epoch end, weights are saved to checkpoint directory. """
