@@ -1,5 +1,5 @@
 # ASL Alphabet Translator 
-# by the DuoLingos (Kiera Walsh and Joan Nekoye)
+## by the DuoLingos (Kiera Walsh and Joan Nekoye)
 
 This project's goal was to create a live ASL alphabet translator that takes live user input and classifies the handshape as a letter. The classifier is a deep learning model with vgg16 as its base and a custom head with 29 output classes (for the 26 letters and signs for nothing, space, and delete). Dropout layers and data augmentation were added to reduce overfitting. We were able to reach approximately 61% testing accuracy with this model.
 
