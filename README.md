@@ -7,6 +7,6 @@ The dataset used was from Kaggle and consisted of many images of each handeshape
 
 To run the program, run `python3 code/camera.py` in the terminal and this should open a new window with a live video feed. Place your hand in the blue box and try out different signs. The yellow letter on the screen will display the corresponding letter for that handshape. As is standard practice in ASL, this program works best with a clear background that is free from distractions. Note that the program is not 100% accurate, refer to the picture below for correct handshapes:
 
-![chart of asl alphabet handshape]([https://ecdn.teacherspayteachers.com/thumbitem/American-Sign-Language-Alphabet-Chart-1604401288/original-142784-1.jpg](https://apsea.ca/sites/default/files/inline-images/asl-abc.png)
+![chart of asl alphabet handshape](https://ecdn.teacherspayteachers.com/thumbitem/American-Sign-Language-Alphabet-Chart-1604401288/original-142784-1.jpg](https://apsea.ca/sites/default/files/inline-images/asl-abc.png)
 
 Technical program requirements include those in the cs1430 course environment, such as tensorflow and cv2.
