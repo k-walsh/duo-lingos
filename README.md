@@ -10,3 +10,5 @@ To run the program, run `python3 code/camera.py` in the terminal and this should
 ![chart of asl alphabet handshape](asl-abc.png)
 
 Technical program requirements include those in the cs1430 course environment, such as tensorflow and cv2.
+
+[Final report](https://drive.google.com/file/d/11Rre0bWAq2756u-cRkOWp9hfGUJ6v6ZX/view?usp=sharing)
